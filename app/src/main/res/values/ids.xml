@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!--Google Play game services IDs. Save this file as res/values/games-ids.xml in your project.-->
+    <resources>
+        <!--app_id-->
+        <string name="app_id" translatable="false">28361982310</string>
+        <!--package_name-->
+        <string name="package_name" translatable="false">com.as.Jetpakpakvf</string>
+        <!--achievement I am flying-->
+        <string name="achievement_i_am_flying" translatable="false">CggI5oKG1GkQAhAB</string>
+        <!--leaderboard Highscore-->
+        <string name="leaderboard_highscore" translatable="false">CggI5oKG1GkQAhAC</string>
+    </resources>
