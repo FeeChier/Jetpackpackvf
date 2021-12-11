@@ -8,7 +8,7 @@ import android.graphics.Rect;
 import static com.as.Jetpakpakvf.GameView.screenRatioX;
 import static com.as.Jetpakpakvf.GameView.screenRatioY;
 
-public class Flight {
+public class Jetpack {
 
     int toShoot = 0;
     boolean isGoingUp = false;
@@ -16,39 +16,39 @@ public class Flight {
     Bitmap flight1, flight2, shoot1, shoot2, shoot3, shoot4, shoot5, dead;
     private GameView gameView;
 
-    Flight (GameView gameView, int screenY, Resources res) {
+    Jetpack(GameView gameView, int screenY, Resources res) {
 
         this.gameView = gameView;
 
-        flight1 = BitmapFactory.decodeResource(res, R.drawable.fly1);
-        flight2 = BitmapFactory.decodeResource(res, R.drawable.fly2);
+        flight1 = BitmapFactory.decodeResource(res, R.drawable.jetpack);//récupère les images
+        flight2 = BitmapFactory.decodeResource(res, R.drawable.jetpack);
 
-        width = flight1.getWidth();
+        width = flight1.getWidth();//récupère la largeur et la hauteur de l'image
         height = flight1.getHeight();
 
-        width /= 10;
-        height /= 10;
+        width /= 15;//réduction de la taille de l'image
+        height /= 15;
 
-        width = (int) (width * screenRatioX);
+        width = (int) (width * screenRatioX);//proportionne l'image à la taille de l'écran
         height = (int) (height * screenRatioY);
 
         flight1 = Bitmap.createScaledBitmap(flight1, width, height, false);
         flight2 = Bitmap.createScaledBitmap(flight2, width, height, false);
 
-        shoot1 = BitmapFactory.decodeResource(res, R.drawable.shoot1);
-        shoot2 = BitmapFactory.decodeResource(res, R.drawable.shoot2);
-        shoot3 = BitmapFactory.decodeResource(res, R.drawable.shoot3);
-        shoot4 = BitmapFactory.decodeResource(res, R.drawable.shoot4);
-        shoot5 = BitmapFactory.decodeResource(res, R.drawable.shoot5);
+        shoot1 = BitmapFactory.decodeResource(res, R.drawable.jetpack);//récupère les images des balles
+        shoot2 = BitmapFactory.decodeResource(res, R.drawable.jetpack);
+        shoot3 = BitmapFactory.decodeResource(res, R.drawable.jetpack);
+        shoot4 = BitmapFactory.decodeResource(res, R.drawable.jetpack);
+        shoot5 = BitmapFactory.decodeResource(res, R.drawable.jetpack);
 
-        shoot1 = Bitmap.createScaledBitmap(shoot1, width, height, false);
+        shoot1 = Bitmap.createScaledBitmap(shoot1, width, height, false);//création de l'image
         shoot2 = Bitmap.createScaledBitmap(shoot2, width, height, false);
         shoot3 = Bitmap.createScaledBitmap(shoot3, width, height, false);
         shoot4 = Bitmap.createScaledBitmap(shoot4, width, height, false);
         shoot5 = Bitmap.createScaledBitmap(shoot5, width, height, false);
 
 
-        dead = BitmapFactory.decodeResource(res, R.drawable.dead);
+        dead = BitmapFactory.decodeResource(res, R.drawable.jetpack);//image de décès
         dead = Bitmap.createScaledBitmap(dead, width, height, false);
 
         y = screenY / 2;
@@ -57,7 +57,7 @@ public class Flight {
     }
 
     Bitmap getFlight () {
-
+//changements de images a chaque coup
         if (toShoot != 0) {
 
             if (shootCounter == 1) {
@@ -102,6 +102,6 @@ public class Flight {
 
     Bitmap getDead () {
         return dead;
-    }
+    }//retourne l'image de décès'
 
 }

@@ -8,44 +8,39 @@ import android.graphics.Rect;
 import static com.as.Jetpakpakvf.GameView.screenRatioX;
 import static com.as.Jetpakpakvf.GameView.screenRatioY;
 
-public class Bunker {
+public class Tour {
 
     public int speed = 20;
     public boolean wasShot = true;
     int x = 0, y, width, height, bunkerCounter = 1;
-    Bitmap bunker, deadbunker;
+    Bitmap tour, deadbunker;
 
-    Bunker (Resources res) {
+    Tour(Resources res) {
 
-        bunker = BitmapFactory.decodeResource(res, R.drawable.police);
+        tour = BitmapFactory.decodeResource(res, R.drawable.obstacleeffel);
 
-        width = bunker.getWidth();
-        height = bunker.getHeight();
+        width = tour.getWidth();
+        height = tour.getHeight();
 
-        width /= 12;
-        height /= 12;
+        width /= 6;
+        height /= 6;
 
         width = (int) (width * screenRatioX);
         height = (int) (height * screenRatioY);
 
-        bunker = Bitmap.createScaledBitmap(bunker, width, height, false);
+        tour = Bitmap.createScaledBitmap(tour, width, height, false);
 
         y = -height;
-        deadbunker = BitmapFactory.decodeResource(res, R.drawable.bunker);
+        deadbunker = BitmapFactory.decodeResource(res, R.drawable.obstacleeffel);
         deadbunker = Bitmap.createScaledBitmap(deadbunker, width, height, false);
     }
 
-    Bitmap getBunker () {
-
-
-        return bunker;
+    Bitmap getTour () {
+        return tour;
     }
 
     Rect getCollisionShape () {
         return new Rect(x, y, x + width, y + height);
-    }
-    Bitmap getDeadbunker () {
-        return deadbunker;
     }
 }
 

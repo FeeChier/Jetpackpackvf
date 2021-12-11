@@ -117,9 +117,9 @@ public class MainActivity extends AppCompatActivity {
         TextView coinscore = findViewById(R.id.highScoreTxt);
         TextView highScoreTxt = findViewById(R.id.highScoreTxt2);
 
-        final SharedPreferences prefs = getSharedPreferences("game", MODE_PRIVATE);
+        final SharedPreferences prefs = getSharedPreferences("game", MODE_PRIVATE);//récupère les informations de gameview
 
-        int highScoreTxto = prefs.getInt("highscore",0);
+        int highScoreTxto = prefs.getInt("highscore",0);////récupère la donnée Highscore
         highScoreTxt.setText("HighScore: " + highScoreTxto);
         updateLeaderboards(highScoreTxto);
         checkForAchievements(1,highScoreTxto);
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void signInSilently() {
+    private void signInSilently() { //connexion automatique
         Log.d(TAG, "signInSilently()");
 
 
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
         signInSilently();
     }
 
-    private void signOut() {
+    private void signOut() {//deconnexion
         Log.d(TAG, "signOut()");
 
         msignin.setVisibility(View.VISIBLE);
@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void handleException(Exception e, String details) {
+    private void handleException(Exception e, String details) { // Exception handler
         int status = 0;
 
         if (e instanceof ApiException) {
@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void checkForAchievements(int requestedScore, int finalScore) {
+    private void checkForAchievements(int requestedScore, int finalScore) { //vérification des réussites, si condition rempli, push sur google play services
         // Check if each condition is met; if so, unlock the corresponding
         // achievement.
 
@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
+/*
     private boolean isPrime(int n) {
         int i;
         if (n == 0 || n == 1) {
@@ -274,8 +274,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-
-    private void updateLeaderboards(int finalScore) {
+*/
+    private void updateLeaderboards(int finalScore) {// update du leaderboard
 
             mOutbox.mEasyModeScore = finalScore;
     }
@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void pushAccomplishments() {
+    private void pushAccomplishments() {//le push sur serveur...
         if (!isSignedIn()) {
             // can't push to the cloud, try again later
             return;
@@ -315,12 +315,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void onShowAchievementsRequested() {
+    public void onShowAchievementsRequested() {//catch réussites
         onResume();
         mAchievementsClient.getAchievementsIntent()
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
                     @Override
-                    public void onSuccess(Intent intent) {
+                    public void onSuccess(Intent intent) {//affichage de l'activity réussite design :)
                         startActivityForResult(intent, RC_UNUSED);
                     }
                 })
@@ -332,12 +332,12 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public void onShowLeaderboardsRequested() {
+    public void onShowLeaderboardsRequested() {//catch leaderboard
         onResume();
         mLeaderboardsClient.getAllLeaderboardsIntent()
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
                     @Override
-                    public void onSuccess(Intent intent) {
+                    public void onSuccess(Intent intent) {//idem
                         startActivityForResult(intent, RC_UNUSED);
                     }
                 })
@@ -375,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void onConnected(GoogleSignInAccount googleSignInAccount) {
+    private void onConnected(GoogleSignInAccount googleSignInAccount) {//connexion
         Log.d(TAG, "onConnected(): connected to Google APIs");
 
         mAchievementsClient = Games.getAchievementsClient(this, googleSignInAccount);
@@ -411,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void onDisconnected() {
+    private void onDisconnected() {//deconnexion
         Log.d(TAG, "onDisconnected()");
 
         mAchievementsClient = null;
@@ -428,7 +428,8 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI() {
         mGreetingTextView.setText(mGreeting);
     }
-    private class AccomplishmentsOutbox {
+
+    private class AccomplishmentsOutbox {//sert a push
         boolean mPrimeAchievement = false;
         int mBoredSteps = 0;
         int mEasyModeScore = -1;

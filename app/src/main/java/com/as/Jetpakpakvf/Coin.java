@@ -17,7 +17,7 @@ public class Coin {
 
     Coin (Resources res) {
 
-        coin = BitmapFactory.decodeResource(res, R.drawable.dogecoin);
+        coin = BitmapFactory.decodeResource(res, R.drawable.rose);
         width = coin.getWidth();
         height = coin.getHeight();
 

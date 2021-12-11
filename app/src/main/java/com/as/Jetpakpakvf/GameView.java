@@ -28,15 +28,16 @@ public class GameView extends SurfaceView implements Runnable {
     private int screenX, screenY, score ,coinscore= 0;
     public static float screenRatioX, screenRatioY;
     private Paint paint;
-    private Bird[] birds;
+    private Obstcl[] obstcls;
     private Coin[] coins;
     private Bunker[] bunkers;
+    private Tour[] tours;
     private SharedPreferences prefs;
     private Random random;
     private SoundPool soundPool;
     private List<Bullet> bullets;
     private int sound;
-    private Flight flight;
+    private Jetpack jetpack;
     private Bullet bullet;
     private GameActivity activity;
     private Background background1, background2;
@@ -81,7 +82,7 @@ public class GameView extends SurfaceView implements Runnable {
         background1 = new Background(screenX, screenY, getResources());
         background2 = new Background(screenX, screenY, getResources());
 
-        flight = new Flight(this, screenY, getResources());
+        jetpack = new Jetpack(this, screenY, getResources());
         bullet = new Bullet(getResources());
         bullets = new ArrayList<>();
 
@@ -91,15 +92,15 @@ public class GameView extends SurfaceView implements Runnable {
         paint.setTextSize(128);
         paint.setColor(Color.WHITE);
 
-        birds = new Bird[4];
+        obstcls = new Obstcl[4];
         coins = new Coin[4];
         bunkers = new Bunker[4];
+        tours = new Tour[4];
 
-        for (int i = 0;i < 4;i++) {
 
-            Bird bird = new Bird(getResources());
-            birds[i] = bird;
-
+        for (int i = 0;i < 4;i++) {//création des obstacles, pièces et bunkers
+            Obstcl obstcl = new Obstcl(getResources());
+            obstcls[i] = obstcl;
         }
 
         for (int j = 0; j<4; j++){
@@ -109,6 +110,11 @@ public class GameView extends SurfaceView implements Runnable {
         for (int x = 0; x<4; x++){
             Bunker bunker = new Bunker(getResources());
             bunkers[x] = bunker;
+        }
+
+        for (int x = 0; x<4; x++){
+            Tour tour = new Tour(getResources());
+            tours[x] = tour;
         }
         random = new Random();
 
@@ -145,16 +151,16 @@ public class GameView extends SurfaceView implements Runnable {
             background2.x = screenX;
         }
 
-        if (flight.isGoingUp)
-            flight.y -= 20 * screenRatioY;
+        if (jetpack.isGoingUp)
+            jetpack.y -= 20 * screenRatioY;
         else
-            flight.y += 20 * screenRatioY;
+            jetpack.y += 20 * screenRatioY;
 
-        if (flight.y < 0)
-            flight.y = 0;
+        if (jetpack.y < 0)
+            jetpack.y = 0;
 
-        if (flight.y >= screenY - flight.height)
-            flight.y = screenY - flight.height;
+        if (jetpack.y >= screenY - jetpack.height)
+            jetpack.y = screenY - jetpack.height;
 
         List<Bullet> trash = new ArrayList<>();
 
@@ -191,6 +197,19 @@ public class GameView extends SurfaceView implements Runnable {
                 }
 
             }
+            for (Tour tour : tours) {
+
+                if (Rect.intersects(tour.getCollisionShape(),
+                        bullet.getCollisionShape())) {
+
+                    score++;
+                    tour.x = -500;
+                    bullet.y = screenY + 500;
+                    tour.wasShot = true;
+
+                }
+
+            }
 
         }
 
@@ -202,11 +221,11 @@ public class GameView extends SurfaceView implements Runnable {
             }
 
 
-        for (Bird bird : birds) {
+        for (Obstcl obstcl : obstcls) {
 
-            bird.x -= bird.speed;
+            obstcl.x -= obstcl.speed;
 
-            if (bird.x + bird.width < 0) {
+            if (obstcl.x + obstcl.width < 0) {
 /*
                 if (!bird.wasShot) {
                     isGameOver = true;
@@ -214,18 +233,18 @@ public class GameView extends SurfaceView implements Runnable {
                 }*/
 
                 int bound = (int) (10 * screenRatioX);
-                bird.speed = random.nextInt(bound);
+                obstcl.speed = random.nextInt(bound);
 
-                if (bird.speed < 10 * screenRatioX)
-                    bird.speed = (int) (10 * screenRatioX);
+                if (obstcl.speed < 10 * screenRatioX)
+                    obstcl.speed = (int) (10 * screenRatioX);
 
-                bird.x = screenX;
-                bird.y = random.nextInt(screenY - bird.height);
+                obstcl.x = screenX;
+                obstcl.y = random.nextInt(screenY - obstcl.height);
 
-                bird.wasShot = false;
+                obstcl.wasShot = false;
             }
 
-            if (Rect.intersects(bird.getCollisionShape(), flight.getCollisionShape())) {
+            if (Rect.intersects(obstcl.getCollisionShape(), jetpack.getCollisionShape())) {
                 score++;
                 isGameOver = true;
                 return;
@@ -249,15 +268,35 @@ public class GameView extends SurfaceView implements Runnable {
 
                 bunker.wasShot = false;
             }
-/*
-            if (Rect.intersects(bunker.getCollisionShape(), flight.getCollisionShape())) {
-                score++;
-                return;
-            }*/
+        }
+
+            for (Tour tour : tours) {
+
+                tour.x -= tour.speed;
+
+                if (tour.x + tour.width < 0) {
+
+                    int bound = (int) (10 * screenRatioX);
+                    tour.speed = random.nextInt(bound);
+
+                    if (tour.speed < 10 * screenRatioX)
+                        tour.speed = (int) (10 * screenRatioX);
+
+                    tour.x = screenX;
+                    tour.y = 900;
+
+                    tour.wasShot = false;
+                }
+                if (Rect.intersects(tour.getCollisionShape(), jetpack.getCollisionShape())) {
+                    score++;
+                    isGameOver = true;
+                    return;
+                }
+
 
         }
-        for (Coin coin : coins){
-            coin.x -= coin.speed;
+        for (Coin coin : coins){//Modélisation des pièces sur le jeu, l'affichage des obstacles et des bunkers marchent sur le même principe
+            coin.x -= coin.speed;//vitesse des pièces
 
             if (coin.x + coin.width < 0) {
 
@@ -268,11 +307,11 @@ public class GameView extends SurfaceView implements Runnable {
                     coin.speed = (int) (10 * screenRatioX);
 
                 coin.x = screenX;
-                coin.y = random.nextInt(screenY - coin.height);
+                coin.y = random.nextInt(screenY - coin.height);//hauteur d'apparition aléatoire
                 coin.wasCollected = false;
             }
-                if (Rect.intersects(coin.getCollisionShape(), flight.getCollisionShape())) {
-                    coinscore++;
+                if (Rect.intersects(coin.getCollisionShape(), jetpack.getCollisionShape())) {//si il y a collision entre la pièce et l'homme volant
+                    coinscore++;//incrémentation
 
                     coin.x = -500;
                     bullet.y = screenY +500;
@@ -284,7 +323,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void draw () {
 
-        if (getHolder().getSurface().isValid()) {
+        if (getHolder().getSurface().isValid()) {//changement de background en fonction du score
             Canvas canvas = getHolder().lockCanvas();
             canvas.drawBitmap(background1.background, background1.x, background1.y, paint);
             canvas.drawBitmap(background2.background, background2.x, background2.y, paint);
@@ -319,13 +358,16 @@ public class GameView extends SurfaceView implements Runnable {
                 canvas.drawBitmap(background2.background5, background2.x, background2.y, paint);
             }
 
-            for (Bird bird : birds)
-                canvas.drawBitmap(bird.getBird(), bird.x, bird.y, paint);
+            for (Obstcl obstcl : obstcls)
+                canvas.drawBitmap(obstcl.getBird(), obstcl.x, obstcl.y, paint);
 
             for (Coin coin : coins)
                 canvas.drawBitmap(coin.getCoin(), coin.x, coin.y, paint);
             for (Bunker bunker : bunkers)
                 canvas.drawBitmap(bunker.getBunker(), bunker.x,bunker.y,paint);
+            ;
+            for (Tour tour : tours)
+                canvas.drawBitmap(tour.getTour(), tour.x,tour.y,paint);
 
             paint.setTextSize(50);
             canvas.drawText("Score : " + score, screenX / 20, 100, paint);
@@ -334,7 +376,7 @@ public class GameView extends SurfaceView implements Runnable {
 
             if (isGameOver) {
                 isPlaying = false;
-                canvas.drawBitmap(flight.getDead(), flight.x, flight.y, paint);
+                canvas.drawBitmap(jetpack.getDead(), jetpack.x, jetpack.y, paint);
                 getHolder().unlockCanvasAndPost(canvas);
                 saveIfHighScore();
                 waitBeforeExiting ();
@@ -342,7 +384,7 @@ public class GameView extends SurfaceView implements Runnable {
                 return;
             }
 
-            canvas.drawBitmap(flight.getFlight(), flight.x, flight.y, paint);
+            canvas.drawBitmap(jetpack.getFlight(), jetpack.x, jetpack.y, paint);
 
             for (Bullet bullet : bullets)
                 try{
@@ -417,25 +459,25 @@ public class GameView extends SurfaceView implements Runnable {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
-                flight.isGoingUp = true;
+                jetpack.isGoingUp = true;
                 if (!prefs.getBoolean("isMute", false))
                     soundPool.play(sound, 1, 1, 0, 0, 1);
-                flight.toShoot++;
+                jetpack.toShoot++;
 
                 break;
             case MotionEvent.ACTION_UP:
-                flight.isGoingUp = false;
-                flight.toShoot=0;
+                jetpack.isGoingUp = false;
+                jetpack.toShoot=0;
                 break;
         }
 
         return true;
     }
-    public void newBullet() {
+    public void newBullet() {//affichage des balles
 
         Bullet bullet = new Bullet(getResources());
-        bullet.x = flight.x + flight.width;
-        bullet.y = flight.y + (flight.height / 2);
+        bullet.x = jetpack.x ;
+        bullet.y = jetpack.y + (jetpack.height / 2);
         bullets.add(bullet);
 
 

@@ -8,19 +8,19 @@ import android.graphics.Rect;
 import static com.as.Jetpakpakvf.GameView.screenRatioX;
 import static com.as.Jetpakpakvf.GameView.screenRatioY;
 
-public class Bird {
+public class Obstcl {
 
     public int speed = 50;
     public boolean wasShot = true;
     int x = 0, y, width, height, birdCounter = 1;
     Bitmap bird1, bird2, bird3, bird4;
 
-    Bird (Resources res) {
+    Obstcl(Resources res) {
 
-        bird1 = BitmapFactory.decodeResource(res, R.drawable.bird1);
-        bird2 = BitmapFactory.decodeResource(res, R.drawable.bird2);
-        bird3 = BitmapFactory.decodeResource(res, R.drawable.bird3);
-        bird4 = BitmapFactory.decodeResource(res, R.drawable.bird4);
+        bird1 = BitmapFactory.decodeResource(res, R.drawable.pigeon);
+        bird2 = BitmapFactory.decodeResource(res, R.drawable.pigeon);
+        bird3 = BitmapFactory.decodeResource(res, R.drawable.pigeon);
+        bird4 = BitmapFactory.decodeResource(res, R.drawable.pigeon);
 
         width = bird1.getWidth();
         height = bird1.getHeight();
